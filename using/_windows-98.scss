@@ -154,6 +154,7 @@ button:not(:disabled):active {
 /*    }*/
 /*}*/
 
+/* FIXME: no-descending-specificity */
 button:focus {
   outline        : 1px dotted #000000;
   outline-offset : -4px;
