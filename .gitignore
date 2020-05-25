@@ -1,0 +1,9 @@
+.idea/**
+node_modules/**
+dart-sass-*/**
+
+*.css
+*.css.map
+*.json
+*.cmd
+*.txt
