@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+ 
+
+name: CI
+
+ 
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the Experimental branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+ 
+
+jobs:
+  build_css:
+    runs-on: ubuntu-latest
+
+ 
+
+    steps:
+      - name: Checkout source Git branch
+        uses: actions/checkout@v2
+        with:
+            ref: master
+            fetch-depth: 10
+            submodules: true
+      
+      - name: Remove old CSS file       
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git rm main.css
+          git commit -m "remove file1.txt"
+      
+      - name: Push changes #1
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
+          
+      - name: Compile CSS from SCSS files
+        if: always()
+        uses: gha-utilities/sass-build@v0.2.6
+        with:
+          source: main.scss
+          destination: main.css
+      
+      - name: Commit files
+        if: always()
+        run: |          
+          git add -f main.css
+          git commit -m "Add CSS" -a
+      
+      - name: Push changes #2
+        if: always()
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
